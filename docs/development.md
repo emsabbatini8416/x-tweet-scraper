@@ -32,7 +32,8 @@ APIFY_LOCAL_STORAGE_DIR=./storage npm run start:dev
 Results are under `storage/datasets/default/`; the run summary is the default
 KV-store `OUTPUT` record. Use `/usr/bin/time -p` before the same command to run a
 small performance measurement. Record the input, proxy, result count, and network
-conditions with any reported number; this repository does not claim a benchmark.
+conditions with any reported number. The grading clock is a paid Apify run to 100
+results, documented in the README after that measurement exists.
 
 ## Docker and deployment
 

@@ -19,7 +19,7 @@ export function matchesFilters(tweet: TweetOutput, filters: TweetFilters): boole
   const hashtagSet = new Set(tweet.entities.hashtags.map((tag) => tag.toLowerCase()));
   if (!filters.hashtags.every((tag) => hashtagSet.has(tag.toLowerCase()))) return false;
   if (filters.since !== null && tweet.createdAt < filters.since) return false;
-  if (filters.until !== null && tweet.createdAt >= filters.until) return false;
+  if (filters.until !== null && tweet.createdAt > filters.until) return false;
   if (filters.language !== null && tweet.lang?.toLowerCase() !== filters.language) return false;
   if (filters.minLikes !== null && tweet.metrics.likes < filters.minLikes) return false;
   if (filters.minRetweets !== null && tweet.metrics.retweets < filters.minRetweets) return false;

@@ -42,8 +42,11 @@ APIFY_LOCAL_STORAGE_DIR=./storage npm run start:dev
 ```
 
 Another supported input is `{ "tweetIds": ["123456789"] }`. At least one of
-`fromUsers`, `tweetIds`, or `searchTerms` is required; unspecified filters impose
-no constraint and active filters use AND semantics. Standard
+`fromUsers`, `tweetIds`, or `searchTerms` is required. Unspecified optional
+filters impose no constraint. `includeReplies` and `includeRetweets` default to
+`false`. `since` / `until` are an inclusive creation window; a date-only value
+covers that whole UTC day. Active filters use AND semantics. Tweet `text` is
+HTML-unescaped with `t.co` links replaced by expanded URLs. Standard
 `proxyConfiguration`, including Apify Proxy groups, is passed to all X requests.
 
 ## X surfaces and limitations
@@ -82,9 +85,26 @@ Create an Apify Actor from this Dockerfile, attach `INPUT_SCHEMA.json`, configur
 the environment secrets below, build, and run a small input. With an Apify CLI
 project connected to that Actor, deploy with `apify push`.
 
-For a repeatable local timing, clear the prior local dataset, fix the same input
-and proxy, then prefix the local run with `/usr/bin/time -p`. No benchmark result
-is claimed because network and X rate-limit conditions were not controlled.
+**Actor URL (paste after deploy):** `https://console.apify.com/actors/<ACTOR_ID>`
+
+Time-to-100 protocol (paid runner, residential proxy, high-volume author):
+
+```json
+{
+  "fromUsers": ["<high-volume-handle>"],
+  "sortBy": "latest",
+  "maxResults": 100,
+  "includeReplies": false,
+  "includeRetweets": false,
+  "proxyConfiguration": { "useApifyProxy": true, "apifyProxyGroups": ["RESIDENTIAL"] }
+}
+```
+
+Start the timer at the first outbound X request and stop when the 100th schema
+item is pushed. Exclude cold-start and build. Record wall-clock here after that
+run: **unmeasured in this checkout** (needs a paid Apify run against a live
+target). Re-run locally with `/usr/bin/time -p` only as a sanity check; it is not
+the grading clock.
 
 Required deployment values:
 

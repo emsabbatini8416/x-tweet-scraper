@@ -11,10 +11,19 @@ function stringList(value: unknown, field: string): string[] {
   return [...new Set(value.map((item) => item.trim()).filter(Boolean))];
 }
 
-function optionalDate(value: unknown, field: string): string | null {
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
+function optionalWindowBound(
+  value: unknown,
+  field: string,
+  bound: 'start' | 'end',
+): string | null {
   if (value === undefined || value === '') return null;
   if (typeof value !== 'string' || Number.isNaN(Date.parse(value))) {
     throw new Error(`${field} must be a valid ISO-8601 date or timestamp`);
+  }
+  if (DATE_ONLY.test(value)) {
+    return bound === 'start' ? `${value}T00:00:00.000Z` : `${value}T23:59:59.999Z`;
   }
   return new Date(value).toISOString();
 }
@@ -53,10 +62,10 @@ export function validateInput(raw: ActorInput | null | undefined): ValidatedInpu
     );
   }
 
-  const since = optionalDate(input.since, 'since');
-  const until = optionalDate(input.until, 'until');
-  if (since !== null && until !== null && since >= until) {
-    throw new Error('since must be earlier than until');
+  const since = optionalWindowBound(input.since, 'since', 'start');
+  const until = optionalWindowBound(input.until, 'until', 'end');
+  if (since !== null && until !== null && since > until) {
+    throw new Error('since must be earlier than or equal to until');
   }
 
   const mediaType = input.mediaType ?? 'any';
@@ -82,8 +91,8 @@ export function validateInput(raw: ActorInput | null | undefined): ValidatedInpu
     minReplies: optionalNonNegativeInteger(input.minReplies, 'minReplies'),
     onlyVerified: input.onlyVerified ?? false,
     mediaType,
-    includeReplies: input.includeReplies ?? true,
-    includeRetweets: input.includeRetweets ?? true,
+    includeReplies: input.includeReplies ?? false,
+    includeRetweets: input.includeRetweets ?? false,
     sortBy,
     maxResults,
     proxyConfiguration: input.proxyConfiguration ?? null,

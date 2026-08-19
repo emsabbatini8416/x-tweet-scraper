@@ -34,13 +34,13 @@
     "since": {
       "title": "Since",
       "type": "string",
-      "description": "Inclusive ISO-8601 date or timestamp.",
+      "description": "Inclusive ISO-8601 date or timestamp. A date-only value starts at 00:00:00 UTC.",
       "editor": "textfield"
     },
     "until": {
       "title": "Until",
       "type": "string",
-      "description": "Exclusive ISO-8601 date or timestamp.",
+      "description": "Inclusive ISO-8601 date or timestamp. A date-only value includes the entire UTC day.",
       "editor": "textfield"
     },
     "language": {
@@ -84,13 +84,13 @@
     "includeReplies": {
       "title": "Include replies",
       "type": "boolean",
-      "default": true,
+      "default": false,
       "editor": "checkbox"
     },
     "includeRetweets": {
       "title": "Include retweets",
       "type": "boolean",
-      "default": true,
+      "default": false,
       "editor": "checkbox"
     },
     "sortBy": {

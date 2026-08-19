@@ -67,9 +67,12 @@ describe('matchesFilters', () => {
     expect(matchesFilters(tweet, { ...filters, hashtags: ['apify', 'missing'] })).toBe(false);
   });
 
-  it('applies inclusive since and exclusive until boundaries', () => {
+  it('applies inclusive since and until boundaries', () => {
     expect(matchesFilters(tweet, { ...filters, since: tweet.createdAt })).toBe(true);
-    expect(matchesFilters(tweet, { ...filters, until: tweet.createdAt })).toBe(false);
+    expect(matchesFilters(tweet, { ...filters, until: tweet.createdAt })).toBe(true);
+    expect(
+      matchesFilters(tweet, { ...filters, until: '2026-01-15T11:59:59.999Z' }),
+    ).toBe(false);
   });
 
   it('filters replies and retweets independently', () => {

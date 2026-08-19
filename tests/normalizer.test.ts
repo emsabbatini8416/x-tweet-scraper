@@ -23,7 +23,7 @@ describe('normalizeTweet', () => {
           },
         },
         legacy: {
-          full_text: 'Hello #Apify',
+          full_text: 'Hello #Apify https://t.co/abc &amp; more',
           lang: 'en',
           created_at: 'Wed Aug 19 12:00:00 +0000 2026',
           conversation_id_str: '123',
@@ -37,7 +37,7 @@ describe('normalizeTweet', () => {
           entities: {
             hashtags: [{ text: 'Apify' }],
             user_mentions: [{ screen_name: 'someone' }],
-            urls: [{ expanded_url: 'https://apify.com' }],
+            urls: [{ url: 'https://t.co/abc', expanded_url: 'https://apify.com' }],
           },
           extended_entities: {
             media: [
@@ -71,7 +71,7 @@ describe('normalizeTweet', () => {
     expect(result).toEqual({
       id: '123',
       url: 'https://x.com/apify/status/123',
-      text: 'Hello #Apify',
+      text: 'Hello #Apify https://apify.com & more',
       lang: 'en',
       createdAt: '2026-08-19T12:00:00.000Z',
       conversationId: '123',

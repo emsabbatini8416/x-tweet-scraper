@@ -26,7 +26,8 @@ change. Never put bearer or guest tokens in documentation or logs.
 author timeline pages and bottom cursors; `TweetResultByRestId` hydrates a tweet.
 The scraper stops on the result limit, no cursor, an old-date page, or a cursor
 loop. Promoted entries and response records that cannot satisfy the output schema
-are ignored.
+are ignored. Tweet text unescapes HTML entities and replaces `t.co` URLs with
+`expanded_url` values from the same entity list.
 
 ## Limitations
 

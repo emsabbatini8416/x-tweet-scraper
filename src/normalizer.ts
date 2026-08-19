@@ -59,6 +59,30 @@ function normalizeMedia(value: unknown): TweetMedia[] {
   });
 }
 
+function unescapeHtml(text: string): string {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+function expandAndUnescapeText(text: string, urls: unknown): string {
+  let expanded = text;
+  if (Array.isArray(urls)) {
+    for (const item of urls) {
+      const entity = asRecord(item);
+      const shortUrl = asString(entity?.url);
+      const fullUrl = asString(entity?.expanded_url);
+      if (shortUrl !== null && fullUrl !== null && shortUrl !== '') {
+        expanded = expanded.split(shortUrl).join(fullUrl);
+      }
+    }
+  }
+  return unescapeHtml(expanded);
+}
+
 function cleanSource(value: unknown): string | null {
   const source = asString(value);
   if (source === null) return null;
@@ -88,10 +112,11 @@ export function normalizeTweet(
   const entities = asRecord(legacy.entities);
   const extendedEntities = asRecord(legacy.extended_entities);
   const media = normalizeMedia(extendedEntities?.media ?? entities?.media);
-  const text =
+  const rawText =
     asString(getPath(tweet, ['note_tweet', 'note_tweet_results', 'result', 'text'])) ??
     asString(legacy.full_text) ??
     '';
+  const text = expandAndUnescapeText(rawText, entities?.urls);
   const inReplyToId = asString(legacy.in_reply_to_status_id_str);
   const quotedTweetId = asString(legacy.quoted_status_id_str);
   const isRetweet = asRecord(legacy.retweeted_status_result) !== null || text.startsWith('RT @');
