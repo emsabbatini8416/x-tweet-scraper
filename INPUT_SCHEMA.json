@@ -28,6 +28,7 @@
     "hashtags": {
       "title": "Hashtags",
       "type": "array",
+      "description": "Hashtags the tweet must contain, with or without #. Applied as an AND post-filter.",
       "editor": "stringList",
       "default": []
     },
@@ -52,30 +53,35 @@
     "minLikes": {
       "title": "Minimum likes",
       "type": "integer",
+      "description": "Minimum like count. Unspecified means no floor.",
       "minimum": 0,
       "editor": "number"
     },
     "minRetweets": {
       "title": "Minimum retweets",
       "type": "integer",
+      "description": "Minimum retweet count. Unspecified means no floor.",
       "minimum": 0,
       "editor": "number"
     },
     "minReplies": {
       "title": "Minimum replies",
       "type": "integer",
+      "description": "Minimum reply count. Unspecified means no floor.",
       "minimum": 0,
       "editor": "number"
     },
     "onlyVerified": {
       "title": "Only verified authors",
       "type": "boolean",
+      "description": "If true, keep only tweets from verified authors.",
       "default": false,
       "editor": "checkbox"
     },
     "mediaType": {
       "title": "Media type",
       "type": "string",
+      "description": "Keep tweets that match this media constraint.",
       "enum": ["any", "text_only", "images", "video", "links"],
       "enumTitles": ["Any", "Text only", "Images", "Video", "Links"],
       "default": "any",
@@ -84,18 +90,21 @@
     "includeReplies": {
       "title": "Include replies",
       "type": "boolean",
+      "description": "If false, drop reply tweets. Defaults to false.",
       "default": false,
       "editor": "checkbox"
     },
     "includeRetweets": {
       "title": "Include retweets",
       "type": "boolean",
+      "description": "If false, drop retweets. Defaults to false.",
       "default": false,
       "editor": "checkbox"
     },
     "sortBy": {
       "title": "Sort by",
       "type": "string",
+      "description": "latest follows timeline order; top ranks each fetched page by engagement.",
       "enum": ["latest", "top"],
       "enumTitles": ["Latest", "Top"],
       "default": "latest",
@@ -104,6 +113,7 @@
     "maxResults": {
       "title": "Maximum results",
       "type": "integer",
+      "description": "Requested result cap. Free-tier runs still emit at most 10 items.",
       "minimum": 1,
       "default": 100,
       "editor": "number"
